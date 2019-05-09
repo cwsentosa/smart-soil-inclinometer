@@ -25,41 +25,27 @@ if(isset($_GET['gid'])
 	&& isset($_GET['data14']))
 {
 
-	$data0 = (int) $_GET['data0'];
-	$data1 = (int) $_GET['data1'];
-	$data2 = (int) $_GET['data2'];
-	$data3 = (int) $_GET['data3'];
-	$data4 = (int) $_GET['data4'];
-	$data5 = (int) $_GET['data5'];
-	$data6 = (int) $_GET['data6'];
-	$data7 = (int) $_GET['data7'];
-	$data8 = (int) $_GET['data8'];
-	$data9 = (int) $_GET['data9'];
-	$data10 = (int) $_GET['data10'];
-	$data11 = (int) $_GET['data11'];
-	$data12 = (int) $_GET['data12'];
-	$data13 = (int) $_GET['data13'];
-	$data14 = (int) $_GET['data14'];
-	
-	if($data0<32768 && $data0>=-32768
-		&& $data1<32768 && $data1>=-32768
-		&& $data2<32768 && $data2>=-32768
-		&& $data3<32768 && $data3>=-32768
-		&& $data4<32768 && $data4>=-32768
-		&& $data5<32768 && $data5>=-32768
-		&& $data6<32768 && $data6>=-32768
-		&& $data7<32768 && $data7>=-32768
-		&& $data8<32768 && $data8>=-32768
-		&& $data9<32768 && $data9>=-32768
-		&& $data10<32768 && $data10>=-32768
-		&& $data11<32768 && $data11>=-32768
-		&& $data12<32768 && $data12>=-32768
-		&& $data13<32768 && $data13>=-32768
-		&& $data14<32768 && $data14>=-32768)
+	if(is_numeric($_GET['gid'])
+		&& is_numeric($_GET['nid'])
+		&& is_numeric($_GET['sid'])
+		&& is_numeric($_GET['data0'])
+		&& is_numeric($_GET['data1'])
+		&& is_numeric($_GET['data2'])
+		&& is_numeric($_GET['data3'])
+		&& is_numeric($_GET['data4'])
+		&& is_numeric($_GET['data5'])
+		&& is_numeric($_GET['data6'])
+		&& is_numeric($_GET['data7'])
+		&& is_numeric($_GET['data8'])
+		&& is_numeric($_GET['data9'])
+		&& is_numeric($_GET['data10'])
+		&& is_numeric($_GET['data11'])
+		&& is_numeric($_GET['data12'])
+		&& is_numeric($_GET['data13'])
+		&& is_numeric($_GET['data14']))
 	{
 		$do = TRUE;
 	}
-
 }
 
 // insert the data sent from url to database
@@ -69,23 +55,48 @@ if($do)
 	$username = "root";
 	$password = "zahra105";
 	$dbname = "soil_inclinometer";
-
+	$tbname = "data_";
+	
+	$gid = (int) $_GET['gid'];
+	if($gid < 10){ $tbname .= "0"; }
+	if($gid < 100){ $tbname .= "0"; }
+	if($gid < 1000){ $tbname .= "0"; }
+	if($gid < 10000){ $tbname .= "0"; }
+	$tbname .= $gid;
+	$tbname .= "_";
+	
+	$nid = (int) $_GET['nid'];
+	if($nid < 10){ $tbname .= "0"; }
+	if($nid < 100){ $tbname .= "0"; }
+	$tbname .= $nid;
+	$tbname .= "_";
+	
+	$sid = (int) $_GET['sid'];
+	if($sid < 10){ $tbname .= "0"; }
+	$tbname .= $sid;
+		
 	$conn = mysqli_connect($host, $username, $password, $dbname);
 	if(!$conn) {
-		echo "error connection";
+		die("error connection");
 	}
 	
-	$sql = "SELECT data0 FROM data_";
-	$sql .= $_GET['gid'];
-	$sql .= "_";
-	$sql .= $_GET['nid'];
-	$sql .= "_";
-	$sql .= $_GET['sid'];
+	$sql = "SHOW TABLES LIKE '";
+	$sql .= $tbname;
+	$sql .= "'";
+	
+	$result0 = mysqli_query($conn, $sql);
+	if(mysqli_num_rows($result0) == 0)
+	{
+		die("error IDdata");
+	}	
+	
+	$sql = "SELECT 1 FROM ";
+	$sql .= $tbname;
 	$sql .= " WHERE time='";
 	$sql .= $_GET['date'];
 	$sql .= " ";
 	$sql .= $_GET['time'];
-	$sql .= "'";
+	$sql .= "' LIMIT 1";
 	
 	echo $sql;
 	echo "<br/>";
@@ -95,12 +106,8 @@ if($do)
 	// check if the data already exist
 	if(mysqli_num_rows($result1) == 0)
 	{
-		$sql = "INSERT INTO data_";
-		$sql .= $_GET['gid'];
-		$sql .= "_";
-		$sql .= $_GET['nid'];
-		$sql .= "_";
-		$sql .= $_GET['sid'];
+		$sql = "INSERT INTO ";
+		$sql .= $tbname;
 		$sql .= " (time,data0,data1,data2,data3,data4,data5,data6,data7,data8,data9,data10,data11,data12,data13,data14) VALUES ('";
 		$sql .= $_GET['date'];
 		$sql .= " ";
@@ -141,9 +148,10 @@ if($do)
 		echo $sql;
 		echo "<br/>";
 		
+		// insert data to database
 		$result2 = mysqli_query($conn, $sql);
 		if(!$result2) {
-			echo "error serverdb";
+			echo "error insertData";
 		} else {
 			echo "success";
 		}
@@ -157,6 +165,6 @@ if($do)
 }
 else
 {
-	echo "error urldata";
+	echo "error URLdata";
 }	
 ?>
