@@ -23,8 +23,10 @@ void loop()
 {
   receiveAndParseData(buffer);
   int strcmp_val = strcmp(buffer, "No message");
-  if (strcmp_val) {
-    Serial.print("buffer: "); Serial.println(buffer);  
+  if (strcmp_val)
+  {
+    Serial.print("buffer: ");
+    Serial.println(buffer);
   }
   sprintf(buffer, "No message");
 
