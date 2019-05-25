@@ -105,7 +105,7 @@ static void parseData(uint8_t data[], uint8_t dataLen, char buffer[])
       sensorData[4][1] = (data[ACC_Y_5_HB_IDX] << 8) + data[ACC_Y_5_LB_IDX];
       sensorData[4][2] = (data[ACC_Z_5_HB_IDX] << 8) + data[ACC_Z_5_LB_IDX];
   
-      sprintf(buffer, "msg_id: %u, instruction code: %u |gid=%u&nid=%u&batt=%u&checksum=%u&date=2019-05-09&time=10%%3A00%%3A03&sid0=%d&data00=%d&data01=%d&data02=%d&sid1=%d&data10=%d&data11=%d&data12=%d&sid2=%d&data20=%d&data21=%d&data22=%d&sid3=%d&data30=%d&data31=%d&data32=%d&sid4=%d&data40=%d&data41=%d&data42=%d",
+      sprintf(buffer, "msg_id: %u, instruction code: %u |gid=%u&nid=%u&batt=%u&checksum=%u&date=2019-05-09&time=10\%3A00\%3A03&sid0=%d&data00=%d&data01=%d&data02=%d&sid1=%d&data10=%d&data11=%d&data12=%d&sid2=%d&data20=%d&data21=%d&data22=%d&sid3=%d&data30=%d&data31=%d&data32=%d&sid4=%d&data40=%d&data41=%d&data42=%d",
               msg_id, instruction_code,
               gid, nid, batt_vol, checksum,
               sensorID[0], sensorData[0][0], sensorData[0][1], sensorData[0][2],
